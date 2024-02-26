@@ -5,6 +5,9 @@ export default function createOneFruit(fruit) {
   url.pathname = '/fruits';
   return fetch(url, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(fruit)
   });
 }

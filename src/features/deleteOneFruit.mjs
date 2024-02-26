@@ -1,14 +1,13 @@
 import { HOST } from "./api.mjs";
 
-export default function updateOneFruit(id, fruit) {
+export default function deleteOneFruit(id) {
   const url = new URL(HOST)
   url.pathname = `/fruits/${id}`;
   return fetch(url, {
-    method: "PUT",
+    method: 'DELETE',
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(fruit)
   })
   .then(res => {
     if (res.ok) {

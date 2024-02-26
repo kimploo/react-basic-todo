@@ -1,17 +1,21 @@
 import s from "./App.module.css";
 import ItemHeader from "./components/ItemHeader";
 import ItemInput from "./components/ItemInput";
-import fruitsData from "../db.json";
 import SumFooter from "./components/SumFooter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import deleteOneFruit from "./features/deleteOneFruit.mjs";
+import getAllFruits from "./features/getAllFruits.mjs";
+import updateOneFruit from "./features/updateOneFruit.mjs";
+import createOneFruit from "./features/createOneFruit.mjs";
 
 export default function App() {
   const newId = Math.trunc(Math.random() * 9995) + 5
   const [isCreateMode, setCreateMode] = useState(false);
-  const [fruits, setFruits] = useState(fruitsData.map(f => {
-    f.quantity = 0;
-    return f
-  }));
+  const [fruits, setFruits] = useState([]);
+  
+  useEffect(() => {
+    getAllFruits().then(res => setFruits(res.map(f => ({...f, quantity: 0}))))
+  }, [])
   
   const sum = fruits.reduce((a, b) => a + (b.price * b.quantity), 0)
   
@@ -24,11 +28,19 @@ export default function App() {
     const newFruit = {
       id: newId,
       name: _name,
-      price: _price,
-      quantity: _quantity
+      price: Number(_price),
+      quantity: Number(_quantity)
     }
-    const newFruits = [...fruits, newFruit]
-    setFruits(newFruits);
+    createOneFruit(newFruit)
+    .then(() => {
+      getAllFruits().then(res => setFruits(res.map((f, i) => {
+        if (i === res.length - 1) {
+          return {...f, quantity: Number(_quantity)}
+        }
+        return {...f, quantity: fruits[i] ? fruits[i].quantity : 0}
+      }
+      )))
+    })
     setCreateMode(false);
   }
 
@@ -37,6 +49,14 @@ export default function App() {
   }
 
   const handleEdit = (newFruit) => {
+    const { id, name, price } = newFruit
+    updateOneFruit(id, { id, name, price })
+    .then(() => {
+      getAllFruits().then(res => setFruits(res.map((f, i) => ({...f, quantity: fruits[i].quantity}))))
+    })
+  };
+  
+  const handleEditQuantity = (newFruit) => {
     const idx = fruits.findIndex((f) => f.id === newFruit.id);
     if (idx !== -1) {
       const copy = fruits.slice();
@@ -46,7 +66,10 @@ export default function App() {
   };
 
   const handleDelete = (id) => {
-    setFruits(fruits.filter((f) => f.id !== id));
+    deleteOneFruit(id)
+    .then(() => {
+      getAllFruits().then(res => setFruits(res.map((f, i) => ({...f, quantity: fruits[i].quantity}))))
+    })
   };
 
   return (
@@ -62,6 +85,7 @@ export default function App() {
                 fruit={f}
                 handleCreate={handleCreate}
                 handleEdit={handleEdit}
+                handleEditQuantity={handleEditQuantity}
                 handleDelete={handleDelete}
                 isCreateMode={false}
               ></ItemInput>
@@ -75,6 +99,7 @@ export default function App() {
               }} 
               handleCreate={handleCreate}
               handleEdit={handleEdit}
+              handleEditQuantity={handleEditQuantity}
               handleDelete={handleDelete}
               setCreateMode={setCreateMode}
               isCreateMode={isCreateMode}

@@ -6,6 +6,7 @@ export default function ItemInput({
   fruit,
   isCreateMode,
   handleEdit,
+  handleEditQuantity,
   handleDelete,
   setCreateMode,
 }) {
@@ -17,18 +18,18 @@ export default function ItemInput({
 
   const handleEditButton = () => {
     handleEdit({
-      id: 1,
+      id,
       name: _name,
-      price: _price,
-      quantity: _quantity,
+      price: Number(_price),
+      quantity: Number(_quantity),
     });
     setIsEditMode(false);
   };
 
   const handleQuantityChange = (e) => {
-    const newQuantity = e.target.value
+    const newQuantity = Number(e.target.value)
     setQuantity(e.target.value);
-    handleEdit({
+    handleEditQuantity({
       ...fruit,
       quantity: newQuantity,
     });
