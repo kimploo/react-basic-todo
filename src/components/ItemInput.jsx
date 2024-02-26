@@ -20,16 +20,17 @@ export default function ItemInput({
       id: 1,
       name: _name,
       price: _price,
-      quantity: _quantity
+      quantity: _quantity,
     });
     setIsEditMode(false);
   };
 
   const handleQuantityChange = (e) => {
+    const newQuantity = e.target.value
     setQuantity(e.target.value);
     handleEdit({
       ...fruit,
-      quantity: _quantity,
+      quantity: newQuantity,
     });
   };
 

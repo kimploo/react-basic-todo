@@ -12,9 +12,10 @@ export default function App() {
     f.quantity = 0;
     return f
   }));
-  const sum = fruits.reduce((a, b) => a + (b.price * b.quantity), 0);
   
-  const handleSubmit = (e) => {
+  const sum = fruits.reduce((a, b) => a + (b.price * b.quantity), 0)
+  
+  const handleNewFruit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget)
     const _name = formData.get(`nameInput_${newId}`)
@@ -26,7 +27,8 @@ export default function App() {
       price: _price,
       quantity: _quantity
     }
-    setFruits([...fruits, newFruit]);
+    const newFruits = [...fruits, newFruit]
+    setFruits(newFruits);
     setCreateMode(false);
   }
 
@@ -50,9 +52,9 @@ export default function App() {
   return (
     <>
       <div className={s.appContainer}>
-        <form onSubmit={handleSubmit} className={s.form}>
-          <fieldset className={s.fieldset}>
-            <legend><h2>장바구니 애플리케이션</h2></legend>
+        <form onSubmit={handleNewFruit} className={s.form}>
+          <div className={s.fieldset}>
+            <h2>장바구니 애플리케이션</h2>
             <ItemHeader></ItemHeader>
             {fruits.map((f) => (
               <ItemInput
@@ -78,7 +80,7 @@ export default function App() {
               isCreateMode={isCreateMode}
             ></ItemInput> : null}
             <SumFooter sum={sum} isCreateMode={isCreateMode} setCreateMode={setCreateMode}></SumFooter>
-          </fieldset>
+          </div>
         </form>
       </div>
     </>
