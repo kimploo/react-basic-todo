@@ -29,6 +29,7 @@ export default function ItemInput({
   const handleQuantityChange = (e) => {
     const newQuantity = Number(e.target.value)
     setQuantity(e.target.value);
+    if (isCreateMode) return;
     handleEditQuantity({
       ...fruit,
       quantity: newQuantity,
@@ -42,6 +43,7 @@ export default function ItemInput({
           <>
             <input
               className={s.inputWrapperInput}
+              data-testid={isCreateMode && "createNameInput"}
               id={`nameInput_${id}`}
               name={`nameInput_${id}`}
               type="name"
@@ -51,6 +53,7 @@ export default function ItemInput({
             />
             <input
               className={s.inputWrapperInput}
+              data-testid={isCreateMode && "createPriceInput"}
               id={`priceInput_${id}`}
               name={`priceInput_${id}`}
               type="number"
@@ -68,6 +71,7 @@ export default function ItemInput({
         )}
         <input
           className={s.inputWrapperInput}
+          data-testid={isCreateMode && "createQuantityInput"}
           id={`quantityInput_${id}`}
           name={`quantityInput_${id}`}
           type="number"
@@ -95,7 +99,7 @@ export default function ItemInput({
               <button type="button" onClick={() => setIsEditMode(true)}>
                 📝
               </button>
-              <button type="button" onClick={() => handleDelete(id)}>
+              <button type="button" onClick={() => handleDelete(String(id))}>
                 🗑️
               </button>
             </>

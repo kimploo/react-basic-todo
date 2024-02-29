@@ -1,4 +1,5 @@
-import { HOST } from "./api.mjs";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { HOST } from "../../api.mjs";
 
 export default function deleteOneFruit(id) {
   const url = new URL(HOST)
@@ -10,9 +11,8 @@ export default function deleteOneFruit(id) {
     },
   })
   .then(res => {
-    if (res.ok) {
-      return res.json()
-    }
-    throw new Error('Network response was not ok.');
+    if (res.ok) return res.json()
   })
 }
+
+export const deleteFruitAPI = createAsyncThunk('fruit/delete', deleteOneFruit)
