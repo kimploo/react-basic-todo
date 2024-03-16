@@ -1,104 +1,90 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import s from "./ItemInput.module.css";
+import timeAgo from "../util/timeAgo";
+import debounce from 'lodash/debounce'
 
-// editable or not
 export default function ItemInput({
-  fruit,
+  todo,
   isCreateMode,
   handleEdit,
-  handleEditQuantity,
   handleDelete,
   setCreateMode,
 }) {
-  const { id, name, price, quantity } = fruit;
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [_name, setName] = useState(name);
-  const [_price, setPrice] = useState(price);
-  const [_quantity, setQuantity] = useState(quantity);
-
-  const handleEditButton = () => {
+  const { id, msg, status, createdAt, updatedAt, finishedAt } = todo;
+  const [_status, setTodoStatus] = useState(status === "DONE");
+  const [_msg, setTodoText] = useState(msg);
+  
+  const cacheHandleEdit = useCallback((msg) => {
     handleEdit({
       id,
-      name: _name,
-      price: Number(_price),
-      quantity: Number(_quantity),
+      msg,
+      status: _status ? "DONE" : "IN_PROGRESS",
+      createdAt,
+      updatedAt: new Date().toISOString(),
+      finishedAt,
     });
-    setIsEditMode(false);
+  }, []);
+
+  const debouncedSendRequest = useCallback(debounce((msg) => cacheHandleEdit(msg), 500), [])
+
+  const handleCheckbox = () => {
+    const newStatus = !_status;
+    setTodoStatus(newStatus);
+    handleEdit({
+      id,
+      msg: _msg,
+      status: newStatus ? "DONE" : "IN_PROGRESS",
+      createdAt,
+      updatedAt: new Date().toISOString(),
+      finishedAt: newStatus ? new Date().toISOString() : null,
+    });
   };
 
-  const handleQuantityChange = (e) => {
-    const newQuantity = Number(e.target.value)
-    setQuantity(e.target.value);
-    if (isCreateMode) return;
-    handleEditQuantity({
-      ...fruit,
-      quantity: newQuantity,
-    });
+  const handleText = (e) => {
+    setTodoText(e.target.value);
+    !isCreateMode && debouncedSendRequest(e.target.value);
   };
 
   return (
     <>
       <div className={s.inputWrapper}>
-        {isCreateMode || isEditMode ? (
-          <>
-            <input
-              className={s.inputWrapperInput}
-              data-testid={isCreateMode && "createNameInput"}
-              id={`nameInput_${id}`}
-              name={`nameInput_${id}`}
-              type="name"
-              value={_name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <input
-              className={s.inputWrapperInput}
-              data-testid={isCreateMode && "createPriceInput"}
-              id={`priceInput_${id}`}
-              name={`priceInput_${id}`}
-              type="number"
-              value={_price}
-              onChange={(e) => setPrice(e.target.value)}
-              min={0}
-              step={1000}
-            />
-          </>
-        ) : (
-          <>
-            <span className={s.inputWrapperItem}>{_name}</span>
-            <span className={s.inputWrapperItem}>{_price}</span>
-          </>
-        )}
         <input
-          className={s.inputWrapperInput}
-          data-testid={isCreateMode && "createQuantityInput"}
-          id={`quantityInput_${id}`}
-          name={`quantityInput_${id}`}
-          type="number"
-          value={_quantity}
-          onChange={handleQuantityChange}
-          min={0}
-          step={1}
+          className={s.inputWrapperCheckbox}
+          data-testid={isCreateMode && "createTodoRadio"}
+          id={`todoRadio_${id}`}
+          name={`todoRadio_${id}`}
+          type="checkbox"
+          checked={_status}
+          onChange={handleCheckbox}
         />
+        {_status ? (
+          <input
+            className={s.inputWrapperDone}
+            id={`todoInput_${id}`}
+            name={`todoInput_${id}`}
+            type="text"
+            value={_msg}
+            readOnly
+            onChange={(e) => setTodoText(e.target.value)}
+          />
+        ) : (
+          <input
+            className={s.inputWrapperTodo}
+            id={`todoInput_${id}`}
+            name={`todoInput_${id}`}
+            type="text"
+            value={_msg}
+            onChange={handleText}
+          />
+        )}
+        <span className={s.inputWrapperItem}>{timeAgo(new Date(updatedAt))}</span>
         <div className={s.buttonWrapper}>
-          {isEditMode ? (
-            <>
-              <button type="button" onClick={() => handleEditButton()}>
-                📝
-              </button>
-              <button type="button" onClick={() => setIsEditMode(false)}>
-                🚫
-              </button>
-            </>
-          ) : isCreateMode ? (
+          {isCreateMode ? (
             <button type="button" onClick={() => setCreateMode(false)}>
               🚫
             </button>
           ) : (
             <>
-              <button type="button" onClick={() => setIsEditMode(true)}>
-                📝
-              </button>
               <button type="button" onClick={() => handleDelete(String(id))}>
                 🗑️
               </button>

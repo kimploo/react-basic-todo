@@ -6,16 +6,26 @@
 }
 
 .inputWrapperItem {
+  font-size: 0.75rem;
   display: inline-flex;
+  align-items: center;
   border-radius: 4px;
   height: 2rem;
   margin: 0.5rem;
   padding: 0.25rem;
-  width: 5rem;
-  flex: 1 0 auto;
+  flex: 0 0 5rem;
 }
 
-.inputWrapperInput {
+.inputWrapperCheckbox {
+  border-radius: 4px;
+  height: 2rem;
+  margin: 0.5rem;
+  padding: 0.25rem;
+  flex: 0 0 3rem;
+  background-color: var(--primary);
+}
+
+.inputWrapperTodo {
   border-radius: 4px;
   height: 2rem;
   margin: 0.5rem;
@@ -23,6 +33,18 @@
   width: 5rem;
   flex: 1 0 auto;
   background-color: var(--primary);
+  text-decoration: none;
+}
+
+.inputWrapperDone {
+  border-radius: 4px;
+  height: 2rem;
+  margin: 0.5rem;
+  padding: 0.25rem;
+  width: 5rem;
+  flex: 1 0 auto;
+  background-color: var(--bg-color);
+  text-decoration: line-through;
 }
 
 .buttonWrapper {

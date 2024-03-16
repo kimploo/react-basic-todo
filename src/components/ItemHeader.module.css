@@ -7,13 +7,21 @@
   font-size: 1.1rem;
 }
 
+.itemHeaderStatus {
+  display: inline-flex;
+  border-radius: 4px;
+  height: 2rem;
+  margin: 0.5rem;
+  padding: 0.25rem;
+  flex: 0 0 3rem;
+}
+
 .itemHeaderItem {
   display: inline-flex;
   border-radius: 4px;
   height: 2rem;
   margin: 0.5rem;
   padding: 0.25rem;
-  width: 5rem;
   flex: 1 0 auto;
 }
 

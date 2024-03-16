@@ -10,13 +10,13 @@ export default function SumFooter({ sum, isCreateMode, setCreateMode }) {
     <>
       <div className={s.wrapper}>
         {isCreateMode ? (
-          <button type="submit">🍎 과일 정보 작성 완료 후 클릭</button>
+          <button type="submit">✅ TODO 등록</button>
         ) : (
           <button type="button" onClick={handleCreateButton}>
-            🍏 과일 추가
+            ❇️ TODO 추가
           </button>
         )}
-        <span>{"🧺 총액 : " + sum}</span>
+        {/* <span>{"🧺 총액 : " + sum}</span> */}
       </div>
     </>
   );

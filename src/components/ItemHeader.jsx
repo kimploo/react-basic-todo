@@ -4,9 +4,8 @@ export default function ItemHeader() {
   return (
     <>
       <div className={s.itemWrapper}>
-        <span className={s.itemHeaderItem}>상품</span>
-        <span className={s.itemHeaderItem}>가격</span>
-        <span className={s.itemHeaderItem}>수량</span>
+        <span className={s.itemHeaderStatus}>상태</span>
+        <span className={s.itemHeaderItem}>TODO</span>
         <div className={s.buttonWrapper}>
           <div></div>
           <div></div>

@@ -3,89 +3,85 @@ import ItemHeader from "./components/ItemHeader";
 import ItemInput from "./components/ItemInput";
 import SumFooter from "./components/SumFooter";
 import { useEffect, useState } from "react";
-import { deleteFruitAPI } from "./features/fruit/api/deleteOneFruit.mjs";
-import { updateOneFruitAPI } from "./features/fruit/api/updateOneFruit.mjs";
+import { deleteTodoAPI } from "./features/todo/api/deleteOneTodo.mjs";
+import { updateOneTodoAPI } from "./features/todo/api/updateOneTodo.mjs";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllFruitsAPI } from "./features/fruit/api/getAllFruits.mjs";
-import { createFruitAPI } from "./features/fruit/api/createOneFruit.mjs";
+import { getAllTodosAPI } from "./features/todo/api/getAllTodos.mjs";
+import { createTodoAPI } from "./features/todo/api/createOneTodo.mjs";
+// import { createTodoAPI } from "./features/todo/api/createOneTodo.mjs";
 
 export default function App() {
   const newId = String(Math.trunc(Math.random() * 9995) + 5)
   const [isCreateMode, setCreateMode] = useState(false);
-  const { fruits } = useSelector((state) => state.fruit);
+  const { todo } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(getAllFruitsAPI())
+    dispatch(getAllTodosAPI())
   }, [dispatch])
   
-  const sum = fruits.reduce((a, b) => a + (b.price * b.quantity), 0)
+  // const sum = fruits.reduce((a, b) => a + (b.price * b.quantity), 0)
   
-  const handleNewFruit = (e) => {
+  const handleNewTodo = (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget)
-    const _name = formData.get(`nameInput_${newId}`)
-    const _price = formData.get(`priceInput_${newId}`)
-    const _quantity = formData.get(`quantityInput_${newId}`)
-    const newFruit = {
+    const _msg = formData.get(`todoInput_${newId}`)
+    const newTodo = {
       id: newId,
-      name: _name,
-      price: Number(_price),
-      quantity: Number(_quantity)
+      status: "IN_PROGRESS",
+      msg: _msg,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      finishedAt: null,
     }
-    dispatch(createFruitAPI(newFruit))
-      .then(() => dispatch(getAllFruitsAPI()))
+    console.log(newTodo)
+    dispatch(createTodoAPI(newTodo))
+      .then(() => dispatch(getAllTodosAPI()))
     setCreateMode(false);
   }
 
-  const handleEdit = (newFruit) => {
-    const { id } = newFruit
-    dispatch(updateOneFruitAPI({ id, fruit: newFruit }))
-    .then(() => dispatch(getAllFruitsAPI()))
+  const handleEdit = (newTodo) => {
+    const { id } = newTodo
+    dispatch(updateOneTodoAPI({ id, todo: newTodo }))
+    .then(() => dispatch(getAllTodosAPI()))
   };
   
-  const handleEditQuantity = (newFruit) => {
-    const { id } = newFruit
-    dispatch(updateOneFruitAPI({ id, fruit: newFruit }))
-    .then(() => dispatch(getAllFruitsAPI()))
-  };
-
   const handleDelete = (id) => {
-    dispatch(deleteFruitAPI(id))
-    .then(() => dispatch(getAllFruitsAPI()))
+    dispatch(deleteTodoAPI(id))
+    .then(() => dispatch(getAllTodosAPI()))
   };
 
   return (
     <>
       <div className={s.appContainer}>
-        <form onSubmit={handleNewFruit} className={s.form}>
+        <form onSubmit={handleNewTodo} className={s.form}>
           <div className={s.fieldset}>
-            <h2>장바구니 애플리케이션</h2>
+            <h2>Getting Things Done</h2>
             <ItemHeader></ItemHeader>
-            {fruits.map((f) => (
+            {todo.map((t) => (
               <ItemInput
-                key={f.id}
-                fruit={f}
+                key={t.id}
+                todo={t}
                 handleEdit={handleEdit}
-                handleEditQuantity={handleEditQuantity}
                 handleDelete={handleDelete}
                 isCreateMode={false}
               ></ItemInput>
             ))}
             {isCreateMode ? <ItemInput key='newFruitId' 
-              fruit={{
+              todo={{
                 id: newId,
-                name: '',
-                price: 0,
-                quantity: 0
+                msg: '',
+                status: "IN_PROGRESS",
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                finishedAt: null,
               }} 
               handleEdit={handleEdit}
-              handleEditQuantity={handleEditQuantity}
               handleDelete={handleDelete}
               setCreateMode={setCreateMode}
               isCreateMode={isCreateMode}
             ></ItemInput> : null}
-            <SumFooter sum={sum} isCreateMode={isCreateMode} setCreateMode={setCreateMode}></SumFooter>
+            <SumFooter isCreateMode={isCreateMode} setCreateMode={setCreateMode}></SumFooter>
           </div>
         </form>
       </div>

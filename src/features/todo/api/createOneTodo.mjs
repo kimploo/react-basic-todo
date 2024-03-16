@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { HOST } from '../../api.mjs'
 
-export default function createOneTodo(fruit) {
+export default function createOneFruit(fruit) {
   const url = new URL(HOST)
-  url.pathname = '/fruits';
+  url.pathname = '/todo';
   return fetch(url, {
     method: "POST",
     body: JSON.stringify(fruit)
@@ -13,4 +13,4 @@ export default function createOneTodo(fruit) {
   })
 }
 
-export const createFruitAPI = createAsyncThunk('fruit/create', createOneTodo)
+export const createTodoAPI = createAsyncThunk('todo/create', createOneFruit)

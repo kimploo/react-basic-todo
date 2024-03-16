@@ -32,6 +32,7 @@ export const initialState = {
   fruits: []
 };
 
+// 하나의 거대한 전역 상태에서 필요한 부분만 잘라서 사용할 수 있게 만든 도구
 export const cardSlice = createSlice({
   name: 'fruit',
   initialState,
@@ -39,10 +40,13 @@ export const cardSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getAllFruitsAPI.fulfilled, (state, action) => {
+        // export const getAllFruitsAPI = createAsyncThunk('fruit/getAll', getAllFruits)
         state.fruits = action.payload
       })
       .addCase(getAllFruitsAPI.rejected, (state, action) => {
         // 과일 조회 에러 시 에러 처리
+        // 과일 조회 실패했습니다. -> 고객에게 보여줄 수도 있고
+        // 에러 수집하는 서버나 CloudWatch에 요청을 보내주는게 좋다.
       }) 
       .addCase(getOneFruitAPI.fulfilled, (state, action) => {
         state.fruits = [...state.fruits, action.payload];
