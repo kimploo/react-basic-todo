@@ -17,8 +17,7 @@ export const todoSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(getAllTodosAPI.fulfilled, (state, action) => {
-        // export const getAllTodosAPI = createAsyncThunk('fruit/getAll', getAllTodos)
-        state.todo = action.payload
+        state.todo = action.payload.data
       })
       .addCase(getAllTodosAPI.rejected, (state, action) => {
         // 과일 조회 에러 시 에러 처리
@@ -26,7 +25,7 @@ export const todoSlice = createSlice({
         // 에러 수집하는 서버나 CloudWatch에 요청을 보내주는게 좋다.
       }) 
       .addCase(getOneTodoAPI.fulfilled, (state, action) => {
-        state.todo = [...state.fruits, action.payload];
+        state.todo = [...state.fruits, action.payload.data];
       })
       .addCase(getOneTodoAPI.rejected, () => {
         // 과일 1개 조회 에러 시 에러 처리

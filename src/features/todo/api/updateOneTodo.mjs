@@ -6,7 +6,10 @@ export default function updateOneTodo({ id, todo }) {
   url.pathname = `/todo/${id}`;
   return fetch(url, {
     method: "PUT",
-    body: JSON.stringify(todo)
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    },
+    body: JSON.stringify({ data: todo })
   })
   .then(res => {
     if (res.ok) return res.json()

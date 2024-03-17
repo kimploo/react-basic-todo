@@ -2,10 +2,10 @@
 
 주요 기능
 
-- [ ] TODO 애플리케이션
-  - TODO create
-  - TODO edit (상태, 텍스트)
-  - TODO delete
+- [x] TODO 애플리케이션
+  - [x] TODO create
+  - [x] TODO edit (상태, 텍스트)
+  - [x] TODO delete
   
 - [x] redux 적용
   - [x] 디렉터리 구조 설계
@@ -20,7 +20,7 @@
   
 ```bash
 ./src
-├── App.jsx # 1, 2 event handler, dispatch 관련 코드는 전부 여기에 있다.
+├── App.jsx
 ├── App.module.css
 ├── Layout.jsx
 ├── Layout.module.css
@@ -35,15 +35,18 @@
 │   └── SumFooter.module.css
 ├── features
 │   ├── api.mjs
-│   └── fruit
-│       ├── api # 서버와 통신하는 코드를 따로 분류 했다.
-│       │   ├── createOneFruit.mjs
-│       │   ├── deleteOneFruit.mjs
-│       │   ├── getAllFruits.mjs
-│       │   ├── getOneFruit.mjs
-│       │   └── updateOneFruit.mjs
-│       └── fruit.reducer.js # slice된 state, 동기 reducer, 비동기 reducer
+│   └── todo
+│       ├── api
+│       │   ├── createOneTodo.mjs
+│       │   ├── deleteOneTodo.mjs
+│       │   ├── getAllTodos.mjs
+│       │   ├── getOneTodo.mjs
+│       │   └── updateOneTodo.mjs
+│       └── todo.reducer.js
 ├── index.css
 ├── main.jsx
-└── store.mjs
+├── store.mjs
+└── util
+    ├── debounce.ts
+    └── timeAgo.ts
 ```

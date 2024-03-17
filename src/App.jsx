@@ -13,7 +13,8 @@ import { createTodoAPI } from "./features/todo/api/createOneTodo.mjs";
 export default function App() {
   const newId = String(Math.trunc(Math.random() * 9995) + 5)
   const [isCreateMode, setCreateMode] = useState(false);
-  const { todo } = useSelector((state) => state.todo);
+  const todoState = useSelector((state) => state.todo);
+  const todo = todoState.todo;
   const dispatch = useDispatch();
   
   useEffect(() => {
@@ -27,14 +28,14 @@ export default function App() {
     const formData = new FormData(e.currentTarget)
     const _msg = formData.get(`todoInput_${newId}`)
     const newTodo = {
-      id: newId,
+      // id: newId,
       status: "IN_PROGRESS",
       msg: _msg,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       finishedAt: null,
+      userId: 1,
     }
-    console.log(newTodo)
     dispatch(createTodoAPI(newTodo))
       .then(() => dispatch(getAllTodosAPI()))
     setCreateMode(false);
