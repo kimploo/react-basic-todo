@@ -24,7 +24,7 @@ jobs:
 
       - name: Run a multi-line script
         run: |
-          npm build
+          npm run build
         env:
           VITE_DEV_SECRET_KEY: ${{ secrets.VITE_DEV_SECRET_KEY }}
       
