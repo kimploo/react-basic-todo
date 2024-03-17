@@ -1,4 +1,4 @@
-# 장바구니 애플리케이션 with React, Redux
+# TODO 애플리케이션 with React, Redux
 
 주요 기능
 
@@ -10,13 +10,13 @@
 - [x] redux 적용
   - [x] 디렉터리 구조 설계
   - [x] Fetch API 제작
-  - [x] fruit slice
+  - [x] todo slice
 
 - [x] `json-server` mock server
-  - [x] GET /fruits
-  - [x] POST /fruits
-  - [x] PUT /fruits/{id}
-  - [x] DELETE /fruits/{id}
+  - [x] GET /todo
+  - [x] POST /todo
+  - [x] PUT /todo/{id}
+  - [x] DELETE /todo/{id}
   
 ```bash
 ./src
