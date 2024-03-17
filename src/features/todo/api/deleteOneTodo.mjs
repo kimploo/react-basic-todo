@@ -7,7 +7,8 @@ export default function deleteOneTodo(id) {
   return fetch(url, {
     method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
+      "Authorization": "Bearer " + import.meta.env.VITE_DEV_SECRET_KEY,
     },
   })
   .then(res => {
